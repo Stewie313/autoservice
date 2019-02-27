@@ -6,11 +6,11 @@ include "include/mysql.php";
 
 
 if(isset($_GET["edit"])){
-	$q=mysqli_query($link,"SELECT * FROM `specialization` WHERE `id`=".$_GET["edit"]);
+	$q=mysqli_query($link,"SELECT * FROM `price` WHERE `id`=".$_GET["edit"]);
 	$a=mysqli_fetch_array($q);
 	$id=$a["id"];
 	$name=$a["Name"];
-	$HS=$a["hour_salary"];
+	$price=$a["Price"];
 } else $id=-1;
 include "include/header.php";
 ?>
@@ -25,7 +25,7 @@ include "include/header.php";
 <?
 if($_POST["id"]>0)
 {
-	$q="UPDATE `specialization` SET `Name` = '".$_POST["name"]."', `hour_salary` = '".$_POST["hour_salary"]."' WHERE `id` = ".$_POST["id"].";";
+	$q="UPDATE `price` SET `Name` = '".$_POST["name"]."', `Price` = '".$_POST["price"]."' WHERE `id` = ".$_POST["id"].";";
 	if(mysqli_query($link,$q)) {
 		$title="Успех!";
 		$status="Данные успешно обновлены!";
@@ -38,59 +38,59 @@ if($_POST["id"]>0)
 }
 else if(strlen($_POST["name"])>2)
 {
-	if($_POST["hour_salary"]<200){
+	if($_POST["price"]<1){
 		$title="Ошибка!";
-		$status="Пожалуйста выставьте более достойную почасовую ставку!";
+		$status="Стоимость услуги не может быть меньше 1!";
 	} else {
-		$query="INSERT INTO `specialization` (`id`, `Name`, `hour_salary`) VALUES (NULL, '".$_POST["name"]."', '".$_POST["hour_salary"]."');";
+		$query="INSERT INTO `price` (`id`, `Name`, `Price`) VALUES (NULL, '".$_POST["name"]."', '".$_POST["price"]."');";
 		if(mysqli_query($link,$query)) {
 			$title="Успех!";
-			$status="Должность успешно добавлена!";
+			$status="Услуга успешно добавлена!";
 		}
 		else {
 			$title="Ошибка!";
-			$status="При добавление должности произошла ошибка!";
+			$status="При добавление услуги произошла ошибка!";
 		}
 	}
 	$opendiag=true;
 }
 else if(isset($_GET["delete"]))
 {
-	$query="DELETE FROM `specialization` WHERE `id`=".$_GET["delete"].";";
+	$query="DELETE FROM `price` WHERE `id`=".$_GET["delete"].";";
 	if(mysqli_query($link,$query)) {
 		$title="Успех!";
-		$status="Должность успешно удалена!";
+		$status="Услуга успешно удалена!";
 	}
 	else {
 		$title="Ошибка!";
-		$status="При удалении должности произошла ошибка!";
+		$status="При удалении услуги произошла ошибка!";
 	}
 	$opendiag=true;
 }
 ?>
 
-<form name="new_client" method="post" action="specialization.php">
+<form name="new_client" method="post" action="price.php">
 	<? if(!isset($_GET["edit"])) {?>
-  <h2 class="pad">Добавление новой должности:</h2>
+  <h2 class="pad">Добавление новой услуги:</h2>
 <? } else {?>
-	<h2 class="pad">Редактирование должности:</h2>
+	<h2 class="pad">Редактирование услуги:</h2>
 	<? }?>
   <input name="id" type="hidden" size="8" value="<?=$id?>">
   <p><b>Наименование:</b><input class="ui-spinner-input" name="name" type="text" size="40" value="<?=$name?>"></p>
-  <p><b>Почасовая ставка:</b><input id="spinner" class="ui-spinner-input" name="hour_salary" type="text" size="40" value="<?=$HS??200;?>"></p>
+  <p><b>Стоимость:</b><input id="spinner2" class="ui-spinner-input" name="price" type="text" size="40" value="<?=$price??100;?>"></p>
 	<p><input class="ui-button ui-widget ui-corner-all"   type="submit" value="<? if(isset($_GET["edit"])) echo "Обновить"; else echo "Добавить";?>">
   <? if(!isset($_GET["edit"])) {?><input class="ui-button ui-widget ui-corner-all"  type="reset" value="Очистить"><? } ?></p>
  </form>
- <? if(isset($_GET["edit"]))exit("<p><a class=\"ui-button ui-widget ui-corner-al\"   href=\"/specialization.php\">Вернуться назад</a></p></body></html>"); ?>
+ <? if(isset($_GET["edit"]))exit("<p><a class=\"ui-button ui-widget ui-corner-al\"   href=\"/price.php\">Вернуться назад</a></p></body></html>"); ?>
  <table class="heavyTable" class="price-table" border="1">
-   <caption>Все должности: <br></caption>
+   <caption>Все услуги: <br></caption>
    <tr class="price-column">
     <th><a href="#">ID</a></th>
     <th><a href="#">Наименование</a></th>
-	  <th><a href="#">Почасовая ставка</a></th>
+	  <th><a href="#">Стоимость</a></th>
    </tr>
    <?
-	 $q="SELECT COUNT(*) as `c` FROM `specialization`";
+	 $q="SELECT COUNT(*) as `c` FROM `price`";
 	 $q=mysqli_query($link,$q);
 	 $q=mysqli_fetch_array($q);
 	 $c=$q["c"];
@@ -100,7 +100,7 @@ else if(isset($_GET["delete"]))
 	 $pages= intval($c/PAGE_MAX);
 	 if($pages*PAGE_MAX < $c) $pages++;
 
-	 $q="SELECT * FROM `specialization`";
+	 $q="SELECT * FROM `price`";
 	 $q.=" LIMIT $start, ".PAGE_MAX;
 
 		$q=mysqli_query($link,$q);
@@ -108,16 +108,16 @@ else if(isset($_GET["delete"]))
 		while($a=mysqli_fetch_array($q))
 		{
 			$empty=false;
-			echo "<tr><td><a href=\"/specialization.php?edit=".$a['id']."\" title=\"Изменить\">".$a['id']." &#9998;</a>  <a href=\"/specialization.php?delete=".$a['id']."\" title=\"Удалить\"> &#10008;</a></td>";
+			echo "<tr><td><a href=\"/price.php?edit=".$a['id']."\" title=\"Изменить\">".$a['id']." &#9998;</a>  <a href=\"/price.php?delete=".$a['id']."\" title=\"Удалить\"> &#10008;</a></td>";
 			echo "<td>".$a['Name']."</td>";
-			echo "<td>".$a['hour_salary']."</td></td></tr>";
+			echo "<td>".$a['Price']."</td></td></tr>";
 		}
 		if($empty) echo '<tr><td colspan="3"><h2>Записей нет.</h2></td></tr>';
 		else {
 			echo '<tr><td class="paginator" colspan="3">';
 				for($i=1;$i<=$pages;$i++) {
 					if($i!=$page)
-						echo '<a href="/specialization.php?page='.$i.'"> '.$i.' </a>';
+						echo '<a href="/price.php?page='.$i.'"> '.$i.' </a>';
 					else
 						echo '<b> '.$i.' </b>';
 				}

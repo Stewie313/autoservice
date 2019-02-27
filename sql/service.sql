@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Фев 27 2019 г., 14:07
+-- Время создания: Фев 27 2019 г., 16:41
 -- Версия сервера: 5.6.41
 -- Версия PHP: 7.2.10
 
@@ -99,6 +99,14 @@ CREATE TABLE `parts` (
   `Price` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Дамп данных таблицы `parts`
+--
+
+INSERT INTO `parts` (`id`, `Name`, `correct_for`, `Price`) VALUES
+(1, 'Сальник', 'All', 45),
+(2, 'Подшипник', 'All', 54);
+
 -- --------------------------------------------------------
 
 --
@@ -120,7 +128,7 @@ CREATE TABLE `partsforworkorder` (
 --
 
 CREATE TABLE `price` (
-  `idPrice` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `Name` varchar(255) DEFAULT NULL,
   `Price` double DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -132,7 +140,7 @@ CREATE TABLE `price` (
 --
 
 CREATE TABLE `priceforworkorder` (
-  `idPriceForWorkOrder` int(11) NOT NULL,
+  `id` int(11) NOT NULL,
   `Price_idPrice` int(11) NOT NULL,
   `WorkOrder_id` int(11) NOT NULL,
   `ammount` int(11) DEFAULT NULL,
@@ -158,7 +166,7 @@ CREATE TABLE `specialization` (
 INSERT INTO `specialization` (`id`, `Name`, `hour_salary`) VALUES
 (1, 'ИТ специалист', 5000),
 (2, 'Механник', 250),
-(3, 'Моторист', 350);
+(4, 'Моторист', 200);
 
 -- --------------------------------------------------------
 
@@ -214,13 +222,13 @@ ALTER TABLE `partsforworkorder`
 -- Индексы таблицы `price`
 --
 ALTER TABLE `price`
-  ADD PRIMARY KEY (`idPrice`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `priceforworkorder`
 --
 ALTER TABLE `priceforworkorder`
-  ADD PRIMARY KEY (`idPriceForWorkOrder`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Индексы таблицы `specialization`
@@ -261,7 +269,7 @@ ALTER TABLE `masters`
 -- AUTO_INCREMENT для таблицы `parts`
 --
 ALTER TABLE `parts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT для таблицы `partsforworkorder`
@@ -273,19 +281,19 @@ ALTER TABLE `partsforworkorder`
 -- AUTO_INCREMENT для таблицы `price`
 --
 ALTER TABLE `price`
-  MODIFY `idPrice` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `priceforworkorder`
 --
 ALTER TABLE `priceforworkorder`
-  MODIFY `idPriceForWorkOrder` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT для таблицы `specialization`
 --
 ALTER TABLE `specialization`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `workorder`
