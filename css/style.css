@@ -48,7 +48,7 @@ table caption {
 }
 table {
   width: 100%;
-  max-width: 600px;
+  max-width: 800px;
   border-collapse: collapse;
   border: 1px solid #38678f;
   margin: 50px auto;
@@ -57,7 +57,7 @@ table {
 th {
   background: steelblue;
   height: 54px;
-  width: 25%;
+  max-width: 250px;
   font-weight: lighter;
   text-shadow: 0 1px 0 #38678f;
   color: white;
