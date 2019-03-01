@@ -17,18 +17,15 @@ include "include/header.php";
 </header>
 <section id="content">
 <article>
-
  <table style="width:1200px" class="heavyTable price-table" border="1">
    <caption>Все заказ-наряды <br></caption>
-   <tr class="price-column">
-    <th><a href="#"> Машина</a></th>
-    <th><a href="#"> Заказчик</a></th>
-    <th><a href="#"> Телефон </a></th>
-    <th><a href="#"> Описание </a></th>
-    <th><a href="#"> Мастер </a></th>
-    <th><a href="#"> Телефон </a></th>
-    <th><a href="#"> Челевеко-часы </a></th>
-   </tr>
+	 <tr class="price-column">
+		<th><a href="#"> Машина</a></th>
+		<th><a href="#"> Заказчик</a></th>
+		<th><a href="#"> Описание </a></th>
+		<th><a href="#"> Мастер </a></th>
+		<th><a href="#"> Челевеко-часы </a></th>
+	 </tr>
 <?
 		$q="SELECT COUNT(*) as `c` FROM `cars`";
 		$q=mysqli_query($link,$q);
@@ -49,12 +46,11 @@ include "include/header.php";
 		while($a=mysqli_fetch_array($q))
 		{
 			$empty=false;
-			echo "<tr><td><a class=\"ajax\" href=\"/form/card.workorder.php?id=".$a['id']."\" title=\"Удалить\">".$a['cName']."<a class=\"ajax\" href=\"/forms/delete.workorder.php?id=".$a['id']."\" title=\"Удалить\"> &#10008;</a></td>";
-			echo "<td>".$a['Name']."</td>";
-			echo "<td>".$a['Phone']."</td>";
+		 $a['human_hour']=$a['human_hour']??0;
+			echo "<tr><td><a href=\"/card.workorder.php?id=".$a['id']."\" title=\"Карточка\">".$a['cName']."<a class=\"ajax\" href=\"/forms/delete.workorder.php?id=".$a['id']."\" title=\"Удалить\"> &#10008;</a></td>";
+			echo "<td>".$a['Name']."<br>(".$a['Phone'].")</td>";
 			echo "<td>".$a['Description']."</td>";
-			echo "<td>".$a['mName']."</td>";
-			echo "<td>".$a['mPhone']."</td>";
+			echo "<td>".$a['mName']."<br>(".$a['mPhone'].")</td>";
 			echo "<td><a class=\"ajax\" href=\"/form/hh.workorder.php?id=".$a['id']."\">".$a['human_hour']."</a></td></tr>";
 		}
 		if($empty) echo '<tr><td colspan="7"><h2>Записей нет.</h2></td></tr>';
@@ -71,6 +67,7 @@ include "include/header.php";
 
    ?>
    </table>
+</article>
 </section>
 <div id="modal-ajax"></div>
 <div id="modal-alert"></div>

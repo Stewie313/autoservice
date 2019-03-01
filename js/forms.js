@@ -12,6 +12,26 @@ $(document).ready(function() {
         $( "#datepicker" ).datepicker();
         $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
         $("#datepicker").val($.datepicker.formatDate('yy-mm-dd', new Date()));
+        $("#spinner").on("input", function(evt) {
+            var self = $(this);
+           self.val(self.val().replace(/[^0-9\.]/g, ''));
+           if(self.val()<1) self.val(1);
+           else if(self.val()>5000) self.val(5000);
+           if ((evt.which != 46 || self.val().indexOf('.') != -1) && (evt.which < 48 || evt.which > 57))
+           {
+             evt.preventDefault();
+           }
+         });
+         $( "#spinner" ).spinner({
+               spin: function( event, ui ) {
+                 if ( ui.value > 5000 ) {
+                   $( this ).spinner( "value", 5000 );
+                   return false;
+                 } else if ( ui.value < 1 ) {
+                   $( this ).spinner( "value", 1 );
+                   return false;
+                 }
+               }});
         $( "#modal-ajax" ).dialog( "open" );
       });
       return false;
@@ -22,7 +42,7 @@ $(document).ready(function() {
     draggable: false,
     modal: true,
     autoOpen: false,
-    width: 800,
+    width: 1000,
     buttons: {
       Ok: function() {
         $.ajax({
@@ -46,7 +66,7 @@ $(document).ready(function() {
     autoOpen: false,
     width: 350,
     buttons: {
-      Ok: function() {$(location).attr('href',window.location.pathname); $( this ).dialog( "close" );}
+      Ok: function() {$(location).attr('href',window.location); $( this ).dialog( "close" );}
     }
   });
 });
