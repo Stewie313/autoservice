@@ -36,22 +36,22 @@ include "include/header.php";
      $q="SELECT `workorder`.`id`, `date_start`,`date_end`,`Description`, `human_hour`, `cars`.`Name` as `cName`,`clients`.`Name`,`clients`.`Phone`, `masters`.`Name` as `mName`, `masters`.`Phone` as `mPhone` FROM `workorder` JOIN `cars` ON `workorder`.`Cars_id`=`cars`.`id` JOIN `clients` ON `cars`.`clients_id`=`clients`.`id` JOIN `masters` ON `Masters_id`=`masters`.`id`"; // Начальный запрос
      $q.=" WHERE `workorder`.`id`=".$_GET["id"];
 
-
-     $q=mysqli_query($link,$q);
-     while($a=mysqli_fetch_array($q))
-     {
+		 $open = true;
+     	$q=mysqli_query($link,$q);
+			while($a=mysqli_fetch_array($q)){
+			if(strlen($a['date_end'])>5) $open=false;
  			$a['human_hour']=$a['human_hour']??0;
        echo "<tr><td><a href=\"#\">".$a['cName']."</a></td>";
        echo "<td>".$a['Name']."<br>(".$a['Phone'].")</td>";
        echo "<td>".$a['Description']."</td>";
        echo "<td>".$a['mName']."<br>(".$a['mPhone'].")</td>";
        echo "<td><a class=\"ajax\" href=\"/form/hh.workorder.php?id=".$a['id']."\">".$a['human_hour']."</a></td></tr>";
-     }
-     ?>
-		 <tr><td colspan="5"><a class="ajax ui-button ui-widget ui-corner-all"  href="/forms/close.workorder.php?id=<?=$_GET["id"];?>">Закрыть заказ-наряд</a></td></tr>
+		 }
+		 if($open)
+		 	echo "<tr><td colspan=\"5\"><a class=\"ajax ui-button ui-widget ui-corner-all\"  href=\"/forms/close.workorder.php?id=".$_GET["id"]."\">Закрыть заказ-наряд</a></td></tr>";
+		 ?>
     </table>
 		</article>
-
 		<article>
 		 <table style="width:1200px" class="heavyTable price-table" border="1">
 		   <caption>Выполненные работы<br></caption>
@@ -79,8 +79,10 @@ include "include/header.php";
 				}
 				if($empty) echo '<tr><td colspan="4"><h2>Записей нет.</h2></td></tr>';
 				else echo '<tr><td colspan="3"><h2>ИТОГО (за работу):</h2></td><td>'.$SUM.'</td></tr>';
+				if($open)
+				echo "<tr><td colspan=\"4\"><a class=\"ajax ui-button ui-widget ui-corner-all\"  href=\"/forms/add.price.workorder.php?id=".$_GET["id"]."\">Добавить</a></td></tr>";
 				 ?>
-				 <tr><td colspan="4"><a class="ajax ui-button ui-widget ui-corner-all"  href="/forms/add.price.workorder.php?id=<?=$_GET["id"];?>">Добавить</a></td></tr>
+
 		   </table>
 			 		</article>
 
@@ -111,8 +113,10 @@ include "include/header.php";
 							}
 							if($empty) echo '<tr><td colspan="4"><h2>Записей нет.</h2></td></tr>';
 							else echo '<tr><td colspan="3"><h2>ИТОГО (за запчасти):</h2></td><td>'.$SUM.'</td></tr>';
+							if($open)
+							echo "<tr><td colspan=\"4\"><a class=\"ajax ui-button ui-widget ui-corner-all\"  href=\"/forms/add.parts.workorder.php?id=".$_GET["id"]."\">Добавить</a></td></tr>";
 							 ?>
-							 <tr><td colspan="4"><a class="ajax ui-button ui-widget ui-corner-all"  href="/forms/add.parts.workorder.php?id=<?=$_GET["id"];?>">Добавить</a></td></tr>
+
 					   </table>
 						 		</article>
 </section>
